@@ -1,14 +1,16 @@
-export default function ListGroup() {
-  let items = [
-    'New York',
-    'London',
-    'Paris',
-  ];
+import {useState} from "react";
 
-  const showItems = items.map(item =>
+export default function ListGroup({items, header, handleClickItem}: Props) {
+  const [selectedItem, setSelectedItem] = useState(-1);
+
+  const showItems = items.map((item, index) =>
     <li
-      className="list-group-item"
-      key={item}
+      className={`list-group-item ${selectedItem === index ? 'active' : ''}`}
+      key={index}
+      onClick={() => {
+        setSelectedItem(index);
+        handleClickItem(item);
+      }}
     >
       {item}
     </li>
@@ -16,11 +18,17 @@ export default function ListGroup() {
 
   return (
     <>
-      <h1>List</h1>
+      <h1>{header}</h1>
       { items.length === 0 && <p>No item found</p>}
       <ul className="list-group">
         {showItems}
       </ul>
     </>
   );
+}
+
+interface Props {
+  items: string[],
+  header: string,
+  handleClickItem: (item: string) => void
 }
