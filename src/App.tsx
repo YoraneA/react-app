@@ -1,20 +1,12 @@
-import ListGroup from "./components/ListGroup.tsx";
+import Alert from "./components/Alert.tsx";
+import Button, {Color} from "./components/Button.tsx";
 import {useState} from "react";
 
 export default function App() {
-  let items = [
-    'New York',
-    'London',
-    'Paris',
-  ];
-
-  const onSelectItem = (item: string) => console.log(item);
+  const [isAlertShown, setAlertShown] = useState(false);
 
   return <div>
-    <ListGroup
-      items={items}
-      header={'Cities'}
-      handleClickItem={onSelectItem}
-    />
+    {isAlertShown && <Alert onClose={() => setAlertShown(false)}>My Alert</Alert>}
+    <Button color={Color.WARNING} onClick={() => setAlertShown(true)}>Test</Button>
   </div>;
 }
