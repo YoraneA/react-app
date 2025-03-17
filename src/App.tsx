@@ -1,5 +1,6 @@
-import axios from 'axios';
 import {useEffect, useState} from "react";
+import userService, {User} from "./services/user-service.ts";
+import {CanceledError} from "./services/api-client.ts";
 
 export default function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -9,10 +10,17 @@ export default function App() {
   useEffect(() => {
     setLoading(true);
 
-    axios.get<User[]>('https://jsonplaceholder.typicode.com/users')
+    const {request, cancel} = userService.getAllUsers();
+
+    request
       .then(response => setUsers(response.data))
-      .catch(error => setError(error.message))
+      .catch(error => {
+        if (err instanceof CanceledError) return;
+        setError(error.message)
+      })
       .finally(() => setLoading(false));
+
+    return () => cancel();
   }, []);
 
   const deleteUser = (id: number) => {
@@ -38,11 +46,4 @@ export default function App() {
       </ul>
     </>
   )
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
 }

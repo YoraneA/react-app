@@ -1,4 +1,4 @@
-import {Expense} from "../../../App.tsx";
+import {Expense} from "../../App.tsx";
 
 export default function ExpenseList({expenses, onDelete}: Props)
 {
