@@ -1,8 +1,15 @@
 import {useEffect, useRef, useState} from "react";
 import ProductList from "./components/ProductList.tsx";
 
+const connect = () => console.log('Connecting to server...');
+const disconnect = () => console.log('Disconnecting from server...');
+
 export default function App() {
-  const [category, setCategory] = useState('');
+  useEffect(() => {
+    connect();
+
+    return () => disconnect();
+  }, []);
 
   return (
     <>
