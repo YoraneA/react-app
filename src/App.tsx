@@ -1,25 +1,30 @@
-import {useEffect, useRef, useState} from "react";
-import ProductList from "./components/ProductList.tsx";
-
-const connect = () => console.log('Connecting to server...');
-const disconnect = () => console.log('Disconnecting from server...');
+import axios from 'axios';
+import {useEffect, useState} from "react";
 
 export default function App() {
-  useEffect(() => {
-    connect();
+  const [users, setUsers] = useState<User[]>([]);
 
-    return () => disconnect();
+  useEffect(() => {
+    axios.get<User[]>('https://jsonplaceholder.typicode.com/users')
+      .then(response => {
+        setUsers(response.data);
+      });
   }, []);
 
   return (
-    <>
-      <select className="form-select" onChange={(e) => setCategory(e.target.value)}>
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Books">Books</option>
-      </select>
-      <ProductList category={category} />
-    </>
-  );
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>
+          {user.name} - {user.email} - {user.phone}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
 }
